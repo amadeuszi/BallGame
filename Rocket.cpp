@@ -5,7 +5,7 @@
 Rocket::Rocket(float x, float y) : Object("rocket.png"), Wall(0.f, 0.f, 10.f, 10.f)
 {
 	sprite->setPosition(x, y);
-	velocity = 3.f;
+	velocity = 4.f;
 }
 
 Circle* Rocket::getCircleBounds() {
@@ -34,6 +34,7 @@ bool Rocket::intersects(Ball* ball) {
 
 void Rocket::bounceTheBall(Ball* ball) {
 	ball->bounceFrom(this);
+	ball->geOutOf(this);
 }
 
 Rocket::~Rocket()

@@ -6,7 +6,7 @@ Model::Model() {
 	height = 400.f;
 	width = 500.f;
 	window = new sf::RenderWindow(sf::VideoMode(width, height), "Ball");
-	sf::Vector2f* ballVelocity = new sf::Vector2f(2.4f, 2.3f);  // it is deleted in ball.cpp
+	sf::Vector2f* ballVelocity = new sf::Vector2f(2.8f, 2.8f);  // it is deleted in ball.cpp
 	ball = new Ball(ballVelocity);
 	rocket = new Rocket(float((width - 120) / 2), float(height - 32 + 13));
 
