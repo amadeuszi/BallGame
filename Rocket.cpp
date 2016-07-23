@@ -2,9 +2,9 @@
 #include <iostream>
 
 
-Rocket::Rocket() : Object("rocket.png"), Wall(0.f, 0.f, 10.f, 10.f)
+Rocket::Rocket(float x, float y) : Object("rocket.png"), Wall(0.f, 0.f, 10.f, 10.f)
 {
-	sprite->setPosition(float((320 - 120) / 2), float(240 - 32 + 13));
+	sprite->setPosition(x, y);
 	velocity = 3.f;
 }
 
@@ -28,8 +28,8 @@ void Rocket::moveRight() {
 		sprite->move(velocity, 0);
 }
 
-bool Rocket::intersects(sf::FloatRect* bounds) {
-	return sprite->getGlobalBounds().intersects(*bounds);
+bool Rocket::intersects(Ball* ball) {
+	return getCircleBounds()->intersects(ball->getCircleBounds());
 }
 
 void Rocket::bounceTheBall(Ball* ball) {

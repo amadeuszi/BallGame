@@ -12,11 +12,13 @@ Controller::Controller() {
 	view = new Viewer(model);
 
 	walls = new vector<Wall*>();
-	float n;
-	walls->push_back(new LeftWall(-20.f, -20.f, 20.f, 1000.f));
-	walls->push_back(new DownWall(-20.f, 240.f, 1000.f, 20.f));
-	walls->push_back(new RightWall(320.f, -20.f, 20.f, 1000.f));
-	walls->push_back(new UpWall(-20.f, -20.f, 1000.f, 20.f));
+	float n = 50.f;
+	float width = model->getWidth();
+	float height = model->getHeight();
+	walls->push_back(new LeftWall(-n, -n, n, height * 2.f));
+	walls->push_back(new DownWall(-n, height, width * 2.f, n));
+	walls->push_back(new RightWall(width, -n, n, height * 2.f));
+	walls->push_back(new UpWall(-n, -n, width * 2.f, n));
 
 	sf::RenderWindow* window = model->getWindow();
 	window->setFramerateLimit(60);
@@ -31,22 +33,15 @@ Controller::Controller() {
 		} //while
 
 		window->clear();
-
 		view->displayAll();
-
-		ballWallCollisions();
-		ballRocketCollisions();
-		ballBrickCollisions();
-
+		collisions();
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && isRocketMoveableLeft()) {
 			model->getRocket()->moveLeft();
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && isRocketMoveableRight()) {
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && isRocketMoveableRight()) {
 			model->getRocket()->moveRight();
 		}
-		
 		model->getBall()->move();
-		
 		window->display();
 	} //while
 }
@@ -57,58 +52,28 @@ bool Controller::isRocketMoveableLeft() {
 
 bool Controller::isRocketMoveableRight() {
 	sf::FloatRect bounds = model->getRocket()->getGlobalBounds();
-	return bounds.left + bounds.width - 10 < 320;
+	return bounds.left + bounds.width - 10 < model->getWidth();
 }
 
-void Controller::ballWallCollisions() {
+void Controller::collisions() {
+	ballCollisions((vector<Brick*>*)model->getBrickArray(), true);
+	ballCollisions((vector<Wall*>*)walls, false);
+	vector<Rocket*>* r = new vector<Rocket*>();
+	r->push_back(model->getRocket());
+	ballCollisions((vector<Rocket*>*)r, false);
+	delete r;
+}
+
+template<typename T>
+void Controller::ballCollisions(vector<T*>* v, bool isEraseActivated) {
 	Ball* ball = model->getBall();
-	sf::FloatRect bounds = ball->getGlobalBounds();
-
-	for (int i = 0; i < walls->size(); i++) {
-		if (walls->at(i)->intersects(&bounds)) {
-			walls->at(i)->bounceTheBall(ball);
-		}
-	}
-}
-
-void Controller::ballRocketCollisions() {
-	Ball* ball = model->getBall();
-	Rocket* rocket = model->getRocket();
-
-	Circle* rocketCircle = rocket->getCircleBounds();
-	Circle* ballCircle = ball->getCircleBounds();
-
-	if (ballCircle->intersects(rocketCircle)) {
-		ball->bounceFrom(rocket);
-		ball->geOutOf(rocket);
-	}
-}
-
-void Controller::ballBrickCollisions() {
-	Ball* ball = model->getBall();
-	vector<Brick*>* brickArray = model->getBrickArray();
-	sf::FloatRect bounds = ball->getGlobalBounds();
-
-	for (int i = 0; i < brickArray->size(); i++) {
-		if (brickArray->at(i)->intersects(&bounds)) {
-			brickArray->at(i)->bounceTheBall(ball);
-			brickArray->erase(brickArray->begin() + i);
-		}
-	}
-}
-
-void Controller::ballBrickCollisions2() {
-	ballCollisions(model->getBrickArray());
-}
-
-void Controller::ballCollisions(vector<Wall*>* v) {
-	Ball* ball = model->getBall();
-	sf::FloatRect bounds = ball->getGlobalBounds();
 
 	for (int i = 0; i < v->size(); i++) {
-		if (v->at(i)->intersects(&bounds)) {
+		if (v->at(i)->intersects(ball)) {
 			v->at(i)->bounceTheBall(ball);
-			v->erase(v->begin() + i);
+			if (isEraseActivated) {
+				v->erase(v->begin() + i);
+			}
 		}
 	}
 }

@@ -10,11 +10,9 @@ class Controller {
 	bool isRocketMoveableRight();
 	Model* model;
 	Viewer* view;
-	void ballWallCollisions();
-	void ballRocketCollisions();
-	void ballBrickCollisions();
-	void ballBrickCollisions2();
-	void ballCollisions(vector<Wall*>* v);
+	void collisions();
+	template<typename T>
+	void ballCollisions(vector<T*>* v, bool isEraseActivated);
 public:
 	Controller();
 	~Controller();

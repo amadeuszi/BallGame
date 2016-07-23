@@ -12,6 +12,6 @@ Wall::~Wall()
 {
 }
 
-bool Wall::intersects(sf::FloatRect* ballBounds) {
-	return ballBounds->intersects(*wall);
+bool Wall::intersects(Ball* ball) {
+	return ball->getGlobalBounds().intersects(*wall);
 }

@@ -23,14 +23,13 @@ Brick::~Brick() {
 }
 
 
-bool Brick::intersects(sf::FloatRect* bounds) {
-	return sprite->getGlobalBounds().intersects(*bounds);
+bool Brick::intersects(Ball* ball) {
+	return sprite->getGlobalBounds().intersects(ball->getGlobalBounds());
 }
 
 void Brick::bounceTheBall(Ball* ball) {
-	sf::FloatRect ballBounds = ball->getGlobalBounds();
 	for (int i = 0; i < walls->size(); i++) {
-		if (walls->at(i)->intersects(&ballBounds)) {
+		if (walls->at(i)->intersects(ball)) {
 			walls->at(i)->bounceTheBall(ball);
 			break;
 		}

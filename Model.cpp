@@ -3,12 +3,12 @@
 #include <iostream>
 
 Model::Model() {
-	height = 240.f;
-	width = 320.f;
+	height = 400.f;
+	width = 500.f;
 	window = new sf::RenderWindow(sf::VideoMode(width, height), "Ball");
 	sf::Vector2f* ballVelocity = new sf::Vector2f(2.4f, 2.3f);  // it is deleted in ball.cpp
 	ball = new Ball(ballVelocity);
-	rocket = new Rocket();
+	rocket = new Rocket(float((width - 120) / 2), float(height - 32 + 13));
 
 	createBricks();
 
@@ -26,10 +26,10 @@ void Model::createBricks() {
 	int m = 3;
 	
 	sf::FloatRect bound = brick->getGlobalBounds();
-	float horizontalPause = (320 - (n * bound.width)) / (n + 1);
-	float verticalPause = 10;
-	float horizontalPosition = 0;
-	float verticalPosition = 0;
+	float horizontalPause = (getWidth() - (n * bound.width)) / (n + 1);
+	float verticalPause = 10.f;
+	float horizontalPosition = 0.f;
+	float verticalPosition = 0.f;
 
 	for (int i = 0; i < m; i++) {
 		verticalPosition += verticalPause;
@@ -39,7 +39,7 @@ void Model::createBricks() {
 			horizontalPosition += bound.width + horizontalPause;
 		}
 		verticalPosition += bound.height;
-		horizontalPosition = 0;
+		horizontalPosition = 0.f;
 	}
 	delete brick;
 }

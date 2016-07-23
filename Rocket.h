@@ -8,10 +8,10 @@ class Rocket : public Object, public Wall {
 	float velocity;
 public:
 	Circle* getCircleBounds();
-	bool intersects(sf::FloatRect* bounds);
+	bool intersects(Ball* ball);
 	void bounceTheBall(Ball* ball);
 	void moveRight();
 	void moveLeft();
-	Rocket();
+	Rocket(float x, float y);
 	~Rocket();
 };

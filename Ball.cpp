@@ -9,7 +9,7 @@ Ball::Ball(sf::Vector2f* v) : Object("ball.png") {
 	vectors = new Vectors();
 
 	sprite->setScale(0.7f, 0.7f);
-	sprite->setPosition(100.f, 100.f);
+	sprite->setPosition(100.f, 190.f);
 }
 
 void Ball::goDown() {

@@ -14,7 +14,7 @@ using namespace std;
 class Brick : public Object, public Wall {
 	vector<Wall*>* walls;
 public:
-	bool intersects(sf::FloatRect* bounds);
+	bool intersects(Ball* ball);
 	void bounceTheBall(Ball* ball);
 	Brick(float x, float y);
 	~Brick();
